@@ -3,15 +3,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather Alerts App</title>
+  <title>AccuWeather - Comprehensive Weather App</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://api.weather.gov">
+  <link rel="preconnect" href="https://api.open-meteo.com">
 </head>
 <body>
-  <h1>Weather Alerts App</h1>
-  <input type="text" id="state-input" placeholder="Enter state abbreviation">
-  <button id="fetch-alerts">Get Weather Alerts</button>
-  <div id="alerts-display"></div>
-  <div id="error-message" class="hidden"></div>
+  <div class="app-container">
+    <!-- Header with Search and Location -->
+    <header class="app-header">
+      <div class="search-container">
+        <div class="location-search">
+          <input type="text" id="location-input" placeholder="Search city, state, or ZIP code">
+          <button id="search-btn" class="search-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <button id="location-btn" class="location-btn" title="Use current location">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7z" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Current Weather Section -->
+      <section class="current-weather-section">
+        <div class="current-weather-card">
+          <div class="weather-header">
+            <div class="location-info">
+              <h1 id="current-location">Loading...</h1>
+              <p id="current-time">--</p>
+            </div>
+            <div class="weather-actions">
+              <button id="refresh-btn" class="refresh-btn" title="Refresh weather">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 4v6h6M20 20v-6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M16 4c-4.418 0-8 3.582-8 8s3.582 8 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          <div class="weather-main">
+            <div class="temperature-display">
+              <div class="temp-large" id="current-temp">--°</div>
+              <div class="weather-icon" id="weather-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="5" fill="#FFB02E"/>
+                </svg>
+              </div>
+            </div>
+            <div class="weather-details">
+              <div class="condition" id="weather-condition">--</div>
+              <div class="feels-like">Feels like <span id="feels-like">--°</span></div>
+            </div>
+          </div>
+
+          <div class="weather-stats">
+            <div class="stat-item">
+              <span class="stat-label">Humidity</span>
+              <span class="stat-value" id="humidity">--%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Wind</span>
+              <span class="stat-value" id="wind-speed">-- mph</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Precipitation</span>
+              <span class="stat-value" id="precipitation">--%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Visibility</span>
+              <span class="stat-value" id="visibility">-- mi</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Alerts Section -->
+      <section class="alerts-section">
+        <div class="section-header">
+          <h2>Weather Alerts</h2>
+          <span id="alert-count" class="alert-count">0 active</span>
+        </div>
+        <div id="alerts-container" class="alerts-container">
+          <div class="no-alerts">
+            <p>No active weather alerts for your area.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Forecast Tabs -->
+      <section class="forecast-section">
+        <div class="forecast-tabs">
+          <button class="tab-btn active" data-tab="hourly">Hourly</button>
+          <button class="tab-btn" data-tab="daily">5-Day</button>
+        </div>
+        
+        <div class="forecast-content">
+          <!-- Hourly Forecast -->
+          <div id="hourly-forecast" class="forecast-tab active">
+            <div class="forecast-grid" id="hourly-grid">
+              <!-- Hourly items will be populated here -->
+            </div>
+          </div>
+          
+          <!-- Daily Forecast -->
+          <div id="daily-forecast" class="forecast-tab">
+            <div class="daily-forecast-list" id="daily-list">
+              <!-- Daily items will be populated here -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Additional Weather Info -->
+      <section class="weather-details-section">
+        <div class="details-grid">
+          <div class="detail-card">
+            <h3>Sunrise & Sunset</h3>
+            <div class="sun-times">
+              <div class="sun-item">
+                <span class="sun-label">Sunrise</span>
+                <span class="sun-time" id="sunrise">--:--</span>
+              </div>
+              <div class="sun-item">
+                <span class="sun-label">Sunset</span>
+                <span class="sun-time" id="sunset">--:--</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="detail-card">
+            <h3>Pressure & UV Index</h3>
+            <div class="pressure-uv">
+              <div class="detail-item">
+                <span class="detail-label">Pressure</span>
+                <span class="detail-value" id="pressure">-- hPa</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">UV Index</span>
+                <span class="detail-value" id="uv-index">--</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="detail-card">
+            <h3>Additional Info</h3>
+            <div class="additional-info">
+              <div class="detail-item">
+                <span class="detail-label">Dew Point</span>
+                <span class="detail-value" id="dew-point">--°</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Cloud Cover</span>
+                <span class="detail-value" id="cloud-cover">--%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Error Message -->
+    <div id="error-message" class="error-message hidden"></div>
+    
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+      <div class="loading-spinner"></div>
+      <p>Loading weather data...</p>
+    </div>
+  </div>
+
   <script src="./index.js"></script>
 </body>
 </html>

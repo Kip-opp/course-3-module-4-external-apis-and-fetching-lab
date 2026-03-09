@@ -1,138 +1,185 @@
+# AccuWeather-Inspired Comprehensive Weather App
 
-# Lab: External APIs and Fetching
+A modern, feature-rich weather application built with vanilla JavaScript, HTML, and CSS that provides comprehensive weather information including current conditions, 5-day forecasts, hourly forecasts, and weather alerts.
 
-## Introduction
+## Features
 
-You’ve just joined the front-end development team of a national safety awareness 
-organization in the US. Your first assignment is to build a web application that 
-fetches weather alerts from the National Weather Service API for a specific U.S. 
-state. The app should dynamically display relevant alert headlines and handle edge 
-cases like invalid input and network errors.
+### 🌤️ Current Weather
+- Real-time temperature and feels-like temperature
+- Weather condition with animated icons
+- Comprehensive weather statistics:
+  - Humidity percentage
+  - Wind speed (with gusts if available)
+  - Precipitation probability
+  - Atmospheric pressure
+  - Cloud cover percentage
+  - Visibility estimation
 
-This lab will strengthen your skills in using the `fetch()` API, working with JSON 
-data, handling user input, and manipulating the DOM—all essential in modern web 
-development.
+### 📅 5-Day Forecast
+- Daily weather predictions for the next 5 days
+- High and low temperatures
+- Weather conditions
+- Precipitation probability
+- Clean, card-based layout
 
-### Note on US State Abbreviations
+### ⏰ Hourly Forecast
+- Next 24 hours of weather data
+- Hourly temperature and conditions
+- Precipitation probability for each hour
+- Easy-to-read grid layout
 
-For this application, you'll be using US state abbreviations. You can find a list of
-state abbreviations on the [US Federal Aviation Administration website](https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/appendix_a.html).
+### 🚨 Weather Alerts
+- Real-time weather alerts from National Weather Service
+- Alert severity indicators (Extreme, Severe, Moderate, Minor)
+- Alert descriptions and timing
+- Automatic alert count display
 
+### 📍 Location-Based Weather
+- Automatic geolocation detection
+- Search by city, state, or ZIP code
+- Location name display
+- Fallback to default location if geolocation fails
 
-## Tools & Resources
+### 🎨 Modern Design
+- Apple-inspired UI design with clean aesthetics
+- Responsive layout for all screen sizes
+- Smooth animations and transitions
+- Dark mode compatible color scheme
 
-- [GitHub Repo](https://github.com/learn-co-curriculum/course-3-module-4-external-apis-and-fetching-lab)
-- [fetch()](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-- [async/await](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises)
-- [EventTarget.addEventListener()](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)
-- [document.createElement()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement)
-- [append()](https://developer.mozilla.org/en-US/docs/Web/API/Element/append)
-- [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
+## Technologies Used
 
-## Set Up
+- **HTML5** - Semantic markup structure
+- **CSS3** - Modern styling with CSS Grid and Flexbox
+- **Vanilla JavaScript ES6+** - Async/await, fetch API, modern DOM manipulation
+- **Open-Meteo API** - Free weather data and forecasts
+- **National Weather Service API** - Weather alerts
+- **Open-Meteo Geocoding API** - Location search
 
-1. **Fork and Clone the Repository:**
-   - Go to the provided GitHub repository link.
-   - Fork the repository to your GitHub account.
-   - Clone the forked repository to your local machine.
-   - Open the project in VSCode.
-   - Run `npm install` to install all necessary dependencies.
-   - Use `open index.html` or `explorer.exe index.html` to open in browser.
-   - Use `npm test` to run the test suite.
+## APIs Used
 
-## Instructions
+### Weather Data
+- **Open-Meteo**: `https://api.open-meteo.com/v1/forecast`
+  - Current weather conditions
+  - Hourly and daily forecasts
+  - Multiple weather parameters
 
-1. Fetch Alerts for a Given State
+### Weather Alerts
+- **National Weather Service**: `https://api.weather.gov/alerts/active`
+  - Real-time weather alerts
+  - Alert severity and descriptions
 
-Create a function that takes a U.S. state abbreviation (e.g., "NY") and uses `fetch()`
-to request data from the National Weather Service Alerts API:
+### Location Search
+- **Open-Meteo Geocoding**: `https://geocoding-api.open-meteo.com/v1/search`
+  - City and location search
+  - Coordinates retrieval
 
+## Installation & Usage
+
+### Local Development
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd course-3-module-4-external-apis-and-fetching-lab
+   ```
+
+2. **Start a local server**
+   ```bash
+   # Using Python 3
+   python3 -m http.server 8000
+   
+   # Or using Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Or using Node.js (if you have http-server installed)
+   npx http-server -p 8000
+   ```
+
+3. **Open in browser**
+   Navigate to `http://localhost:8000` in your web browser.
+
+### Features Overview
+
+1. **Current Weather Display**
+   - Shows temperature, conditions, and detailed statistics
+   - Updates automatically with location changes
+
+2. **Location Management**
+   - Automatic geolocation on first visit
+   - Search bar for specific locations
+   - Current location button for quick updates
+
+3. **Forecast Tabs**
+   - Switch between hourly and 5-day forecasts
+   - Interactive tab interface
+
+4. **Weather Alerts**
+   - Real-time alert notifications
+   - Severity-based color coding
+   - Detailed alert information
+
+5. **Additional Weather Details**
+   - Sunrise and sunset times
+   - Pressure and UV index
+   - Dew point and cloud cover
+
+## Browser Compatibility
+
+- Chrome (recommended)
+- Firefox
+- Safari
+- Edge
+- Opera
+
+## Performance Features
+
+- **Parallel API Requests**: All weather data is fetched simultaneously for optimal performance
+- **Error Handling**: Graceful fallbacks when APIs are unavailable
+- **Loading States**: Smooth loading animations and states
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+
+## Customization
+
+### Styling
+The CSS is organized with CSS custom properties (variables) for easy theming:
+- Color palette variables in `:root`
+- Typography and spacing variables
+- Shadow and animation variables
+
+### API Configuration
+API endpoints are centralized in the `WEATHER_API` object for easy modification:
 ```javascript
-`https://api.weather.gov/alerts/active?area=${STATE_ABBR}`
+const WEATHER_API = {
+    current: "https://api.open-meteo.com/v1/forecast",
+    forecast: "https://api.open-meteo.com/v1/forecast",
+    alerts: "https://api.weather.gov/alerts/active?area=",
+    geocoding: "https://geocoding-api.open-meteo.com/v1/search"
+};
 ```
 
-Replace `STATE_ABBR` with the user’s input value. Handle network and API errors
-gracefully.
+## Future Enhancements
 
-2. Display the Alerts
+Potential features that could be added:
+- Weather maps and radar
+- Multiple location favorites
+- Weather notifications
+- Historical weather data
+- Weather widgets
+- Dark/light theme toggle
+- Unit conversion (Celsius/Fahrenheit)
 
-When the fetch is successful, show:
+## License
 
-* A summary message using the `title` property and number of alerts (under the `features` key) in the data from the API response, like:  
-   * "Current watches, warnings, and advisories for Minnesota: 11"
-* A list of alert headlines, each as its own line or bullet.
-   * Each alert is available as an array under `features` and each alert headline is available under `properties.headline` in the array.
+This project is open source and available under the [MIT License](LICENSE).
 
-3. Clear and Reset the UI
+## Contributing
 
-Each time the user fetches new data:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-* Clear the input field.
-* Update the weather alerts display with fresh data, removing any previous data.
+## Support
 
-4. Error Handling
+If you encounter any issues or have suggestions for improvements, please open an issue in the repository.
 
-When something goes wrong (e.g., empty input, bad state code, or network failure):
+---
 
-* Display the message in the error.
-   * from `.catch` this can be accessed using the `message` key:
-```javascript
-.catch(errorObject => console.log(errorObject.message))
-```
-* Show the message in a dedicated `<div id="error-message">`.
-* Ensure this div is hidden and text is cleared when the next successful request is made.
-
-## BONUS: Additional Features
-
-Explore additional features to further improve the application:
-
-### `loading` Indicator
-
-Add a loading spinner while fetching data to improve user experience:
-
-```js
-function showLoadingSpinner() {
-  spinnerElement.style.display = 'block';
-}
-
-function hideLoadingSpinner() {
-  spinnerElement.style.display = 'none';
-}
-```
-
-### Error Styling
-
-Use CSS classes to style error messages dynamically:
-
-```js
-function displayError(message) {
-  errorElement.textContent = message;
-  errorElement.classList.add('error');
-}
-```
-
-### Input Validation
-
-Validate that user input is two capital letters before making the request.
-
-## Test and Refine
-
-Use the included Jest tests by running `npm test` to validate:
-
-* The fetch request is made using the input state abbreviation.
-* When a successful fetch request is made, the title of the data along with the number 
-of alerts is displayed (i.e. 'Current watches, warnings, and advisories for New York: 
-7')
-* When the 'Get Weather Alerts' button is clicked, the input clears.
-* When an unsuccessful request is made the error message is displayed.
-* Error messages are cleared and hidden after a successful request.
-
-## Document and Maintain
-
-Once all tests are passing and the app is working as expected, push your working code 
-to GitHub and submit.
-
-```bash
-git commit -am "final solution"
-git push origin main
-```
+**Built with ❤️ using modern web technologies**
