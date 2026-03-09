@@ -79,8 +79,8 @@ A modern, feature-rich weather application built with vanilla JavaScript, HTML, 
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd course-3-module-4-external-apis-and-fetching-lab
+   git clone git@github.com:Kip-opp/Weather-APP..external-APIs-and-fetching-lab.git
+   cd Weather-APP..external-APIs-and-fetching-lab.git
    ```
 
 2. **Start a local server**
